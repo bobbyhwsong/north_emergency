@@ -91,9 +91,6 @@ def save_data():
 def show_intro():
     st.title("🚑 응급 상황 대응 학습 프로그램")
     
-    # 헤더 이미지
-    st.image("images/image.jpg", use_container_width=True)
-    
     # 프로그램 소개
     st.markdown("""
     ## 응급 상황, 당신의 판단이 생명을 좌우합니다

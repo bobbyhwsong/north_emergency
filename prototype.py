@@ -92,7 +92,7 @@ def show_intro():
     st.title("🚑 응급 상황 대응 학습 프로그램")
     
     # 헤더 이미지
-    st.image("images/emergency.jpg", use_container_width=True)
+    st.image("images/image.jpg", use_container_width=True)
     
     # 프로그램 소개
     st.markdown("""

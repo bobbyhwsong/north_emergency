@@ -57,32 +57,42 @@ tasks = {
     }
 }
 
-# --- 데이터 저장 함수 ---
+# --- 데이터 저장 함수 수정 ---
 def save_data():
-    if not os.path.exists('saved_data'):
-        os.makedirs('saved_data')
-
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-    task_name = st.session_state.task.replace(' ', '_')
-    filename = f"saved_data/{timestamp}_{task_name}.csv"
-
+    
+    # 세션 스토리지에 저장
+    if 'saved_responses' not in st.session_state:
+        st.session_state.saved_responses = []
+    
     data = {
-        'Timestamp': [timestamp],
-        'Task': [st.session_state.task]
+        'Timestamp': timestamp,
+        'Task': st.session_state.task,
+        'Trust_Responses': st.session_state.trust,
+        'Selected_Action': st.session_state.selected_action
     }
-    for card, trust in st.session_state.trust.items():
-        data[f"Trust_{card}"] = [trust]
-    data['Selected_Action'] = [', '.join(st.session_state.selected_action)]
-
-    df = pd.DataFrame(data)
-    df.to_csv(filename, index=False)
+    
+    # 세션에 데이터 저장
+    st.session_state.saved_responses.append(data)
+    
+    # 선택적: 데이터 다운로드 버튼 제공
+    if st.session_state.page == 'feedback':
+        if len(st.session_state.saved_responses) > 0:
+            df = pd.DataFrame(st.session_state.saved_responses)
+            csv = df.to_csv(index=False)
+            st.download_button(
+                label="📥 학습 기록 다운로드",
+                data=csv,
+                file_name=f"emergency_responses_{timestamp}.csv",
+                mime="text/csv"
+            )
 
 # --- 화면 표시 함수 ---
 def show_intro():
     st.title("🚑 응급 상황 대응 학습 프로그램")
     
     # 헤더 이미지
-    st.image("https://www.ambulance.nsw.gov.au/__data/assets/image/0006/552264/Calling-an-Ambulance.jpg", use_container_width=True)
+    st.image("images/emergency.jpg", use_container_width=True)
     
     # 프로그램 소개
     st.markdown("""

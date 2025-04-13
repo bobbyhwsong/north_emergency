@@ -141,7 +141,6 @@ def show_intro():
         if st.button("학습 시작하기 👉", use_container_width=True):
             st.session_state.task = selected_task
             st.session_state.page = 'task'
-            st.session_state.timer_start_time = time.time()
             st.rerun()
 
     # 하단 설명
@@ -155,9 +154,13 @@ def show_task():
 
     # 시작 버튼을 추가하여 사용자가 준비되었을 때 타이머 시작
     if 'timer_started' not in st.session_state:
-        st.markdown("### ⚠️ 준비가 되면 시작하기 버튼을 눌러주세요")
+        st.title("준비하기")
+        st.markdown("### ⚠️ 시작하기 버튼을 누르면 30초 타이머가 시작됩니다")
+        st.markdown("#### 현재 상황")
+        st.info(tasks[st.session_state.task]['situation'])
+        
         if st.button("시작하기", use_container_width=True):
-            st.session_state.timer_start_time = time.time()
+            st.session_state.timer_start_time = time.time()  # 여기로 이동
             st.session_state.timer_started = True
             st.rerun()
         st.stop()

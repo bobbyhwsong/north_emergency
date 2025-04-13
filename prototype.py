@@ -141,6 +141,7 @@ def show_intro():
         if st.button("학습 시작하기 👉", use_container_width=True):
             st.session_state.task = selected_task
             st.session_state.page = 'task'
+            st.session_state.timer_start_time = time.time()
             st.rerun()
 
     # 하단 설명
@@ -150,19 +151,6 @@ def show_intro():
 def show_task():
     if st.session_state.task is None:
         st.warning("사이드바에서 Task를 먼저 선택해주세요.")
-        st.stop()
-
-    # 시작 버튼을 추가하여 사용자가 준비되었을 때 타이머 시작
-    if 'timer_started' not in st.session_state:
-        st.title("준비하기")
-        st.markdown("### ⚠️ 시작하기 버튼을 누르면 30초 타이머가 시작됩니다")
-        st.markdown("#### 현재 상황")
-        st.info(tasks[st.session_state.task]['situation'])
-        
-        if st.button("시작하기", use_container_width=True):
-            st.session_state.timer_start_time = time.time()  # 여기로 이동
-            st.session_state.timer_started = True
-            st.rerun()
         st.stop()
 
     st.title("정보 탐색 및 행동 결정")
@@ -297,19 +285,18 @@ def show_feedback():
 
     if st.button("확인", use_container_width=True):
         if again == "예":
+            # 현재 태스크를 유지하고 다시 시작
             st.session_state.page = 'task'
             st.session_state.trust = {}
             st.session_state.selected_action = []
-            if 'timer_started' in st.session_state:
-                del st.session_state.timer_started  # timer_started 초기화
+            st.session_state.timer_start_time = time.time()
         else:
+            # 첫 화면으로 돌아가기
             st.session_state.page = 'intro'
             st.session_state.trust = {}
             st.session_state.selected_action = []
             st.session_state.task = None
             st.session_state.timer_start_time = None
-            if 'timer_started' in st.session_state:
-                del st.session_state.timer_started  # timer_started 초기화
         st.rerun()
 
 # --- 메인 페이지 흐름 ---

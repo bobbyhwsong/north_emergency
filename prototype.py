@@ -138,11 +138,16 @@ def show_intro():
     st.markdown("---")
     col1, col2, col3 = st.columns([1,2,1])
     with col2:
-        if st.button("학습 시작하기 👉", use_container_width=True):
-            st.session_state.task = selected_task
-            st.session_state.page = 'task'
-            st.session_state.timer_start_time = time.time()
-            st.rerun()
+        start_button = st.button("학습 시작하기 👉", use_container_width=True)
+        if start_button:
+            st.session_state.update({
+                'page': 'task',
+                'task': selected_task,
+                'timer_start_time': time.time(),
+                'trust': {},
+                'selected_action': []
+            })
+            st.experimental_rerun()
 
     # 하단 설명
     st.markdown("---")
